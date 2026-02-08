@@ -5,7 +5,7 @@ This is an assembler that intends to be easy to extend to new targets and new ob
 
 **The current status of the linker is unfinished and it is in the process of a redesign. Nonetheless it was deemed feature rich enough to consider releasing it publicly.** it supports the following targets:
 
-* `680x`: The Motorola 6800 and 6809 (based on [6809tools](https://github.com/BinaryMelodies/6809tools), the assembler relicensed under the [MIT](LICENSE.md) license)
+* `680x`: The Motorola 6800 and 6809 (based on [6809tools](https://github.com/BinaryMelodies/6809tools), the assembler relicensed under the [MIT](LICENSE) license)
 
 * `dummy`: A backend with no instruction set, mostly intended for testing
 
@@ -60,7 +60,7 @@ The specific targets need to assure that this iteration halts eventually, for ex
 
 The assembler supports output formats with different feature sets.
 As such, some directives only work for specific targets or work differently for different targets, for example `.org` and `.skip`.
-See the file `doc.md` for more details on how to use the directives.
+See the file [doc.md](doc.md) for more details on how to use the directives.
 
 # Compilation
 
