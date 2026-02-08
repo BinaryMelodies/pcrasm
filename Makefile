@@ -8,7 +8,7 @@ asms:
 	make bin/asm-x80
 	make bin/asm-x65
 	make bin/asm-680x
-	make bin/asm-68k
+#	make bin/asm-68k
 	make bin/asm-i4
 
 clean:
@@ -18,7 +18,7 @@ clean:
 	make -C src/x80 clean
 	make -C src/x65 clean
 	make -C src/680x clean
-	make -C src/68k clean
+#	make -C src/68k clean
 	make -C src/i4 clean
 
 distclean: clean
@@ -28,7 +28,7 @@ distclean: clean
 	make -C src/x80 distclean
 	make -C src/x65 distclean
 	make -C src/680x distclean
-	make -C src/68k distclean
+#	make -C src/68k distclean
 	make -C src/i4 distclean
 
 .PHONY: all clean distclean asms tests bin/asm-dummy bin/asm-x86 bin/asm-x86.old bin/asm-x80 bin/asm-x65 bin/asm-680x bin/asm-68k bin/asm-i4
