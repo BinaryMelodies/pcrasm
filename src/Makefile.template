@@ -1,0 +1,51 @@
+
+SRCPATH=..
+OBJPATH=../../obj/$(TARGET)
+BINPATH=../../bin
+
+CINCLUDE=$(SRCPATH)/asm.h $(SRCPATH)/integer.h $(SRCPATH)/syntax.h $(SRCPATH)/symbolic.h $(SRCPATH)/preprocess.h $(SRCPATH)/elf.h $(SRCPATH)/coff.h $(SRCPATH)/hex.h $(SRCPATH)/omf.h $(SRCPATH)/$(TARGET)/isa.h $(OBJPATH)/$(TARGET)/parser.tab.h $(INCADD)
+
+all: $(BINPATH)/asm-$(TARGET) $(ALL_OTHERS)
+
+clean:
+	rm -rf $(BINPATH)/asm-$(TARGET) $(OBJPATH)
+
+distclean: clean
+	rm -rf *~ $(SRCPATH)/$(TARGET)/*~ $(patsubst %,$(SRCPATH)/`dirname %`/*~,$(SRCADD))
+
+.PHONY: all clean distclean
+
+$(BINPATH)/asm-$(TARGET): $(OBJPATH)/asm.o $(OBJPATH)/symbolic.o $(OBJPATH)/preprocess.o $(OBJPATH)/syntax.o $(OBJPATH)/elf.o $(OBJPATH)/coff.o $(OBJPATH)/hex.o $(OBJPATH)/omf.o $(OBJPATH)/rel.o $(OBJPATH)/$(TARGET)/parser.yy.o $(OBJPATH)/$(TARGET)/parser.tab.o $(OBJPATH)/$(TARGET)/gen.o $(patsubst %.c,$(OBJPATH)/%.o,$(SRCADD))
+	mkdir -p `dirname $@`
+	gcc -o $@ $^ -g -Wall -DUSE_GMP=1 -lgmp -D$(TARGET_DEF)=1
+
+$(BINPATH)/asm-$(TARGET).old: $(SRCPATH)/asm.c $(SRCPATH)/symbolic.c $(SRCPATH)/preprocess.c $(SRCPATH)/syntax.c $(SRCPATH)/elf.c $(SRCPATH)/coff.c $(SRCPATH)/hex.c $(SRCPATH)/omf.c $(SRCPATH)/rel.c $(OBJPATH)/$(TARGET)/parser.yy.c $(OBJPATH)/$(TARGET)/parser.tab.c $(SRCPATH)/$(TARGET)/gen.c $(patsubst %.c,$(SRCPATH)/%.c,$(SRCADD))
+	mkdir -p `dirname $@`
+	gcc -o $@ $^ -g -Wall -D$(TARGET_DEF)=1
+
+$(OBJPATH)/%.o: $(SRCPATH)/%.c $(CINCLUDE)
+	mkdir -p `dirname $@`
+	gcc -c -o $@ $< -g -Wall -DUSE_GMP=1 -D$(TARGET_DEF)=1
+
+$(OBJPATH)/%.o: $(OBJPATH)/%.c $(CINCLUDE)
+	mkdir -p `dirname $@`
+	gcc -c -o $@ $< -g -Wall -DUSE_GMP=1 -D$(TARGET_DEF)=1
+
+$(OBJPATH)/$(TARGET)/parser.lex: $(SRCPATH)/$(TARGET)/parser.lex $(SRCPATH)/parser.lex
+	mkdir -p `dirname $@`
+	python3 ../../ypp.py --noline $< $@
+
+$(OBJPATH)/$(TARGET)/parser.yy.c: $(OBJPATH)/$(TARGET)/parser.lex
+	mkdir -p `dirname $@`
+	flex -o $@ $<
+
+$(OBJPATH)/$(TARGET)/parser.y: $(SRCPATH)/$(TARGET)/parser.y $(SRCPATH)/parser.y $(YACCADD)
+	mkdir -p `dirname $@`
+	python3 ../../ypp.py $< $@
+
+$(OBJPATH)/$(TARGET)/parser.tab.c $(OBJPATH)/$(TARGET)/parser.tab.h &: $(OBJPATH)/$(TARGET)/parser.y
+	mkdir -p `dirname $@`
+	bison -vd $< -o $(OBJPATH)/$(TARGET)/parser.tab.c
+
+.SUFFIXES:
+
