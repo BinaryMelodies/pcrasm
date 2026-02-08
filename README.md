@@ -3,7 +3,7 @@
 
 This is an assembler that intends to be easy to extend to new targets and new object file formats.
 
-**The current status of the linker is unfinished and it is in the process of a redesign. Nonetheless it was deemed feature rich enough to consider releasing it publicly.** it supports the following targets:
+**The current status of the assembler is unfinished and it is in the process of a redesign. Nonetheless it was deemed feature rich enough to consider releasing it publicly.** It supports the following targets:
 
 * `680x`: The Motorola 6800 and 6809 (based on [6809tools](https://github.com/BinaryMelodies/6809tools), the assembler relicensed under the [MIT](LICENSE) license)
 
@@ -46,7 +46,7 @@ It also features a macro facility and stores values as arbitrary precision integ
 To achieve this, the assembler is divided into a platform independent part and platform specific parts.
 The platform independent part handles preprocessing the file, evaluating expressions, maintaining and manipulating the instruction flow and generating the final binary.
 This code has almost no references to the targets and usually needs only minor modifications when implementing a new target.
-The platform dependend parts are included under subdirectories for each target.
+The platform dependent parts are included under subdirectories for each target.
 These are typically independent from each other, but it is possible to include parts of other ones (for example, the x86 parser can include Intel 8080 and Intel 8089 instructions in the input source code).
 
 The lexical analyzer and parser generator are similarly divided into two components: a general one and a platform specific one.
